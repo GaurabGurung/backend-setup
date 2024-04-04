@@ -1,5 +1,3 @@
-// require("dotenv"), config({ path: "./env" });
-
 import dotenv from "dotenv";
 
 import connectDB from "./db/index.js";
@@ -8,7 +6,21 @@ dotenv.config({
   path: "./.env",
 });
 
-connectDB();
+connectDB()
+  .then(() => {
+    app.listen(process.env.PORT || 9000, () => {
+      console.log(`Server is running at port : ${process.env.PORT}`);
+    });
+  })
+
+  .catch((err) => {
+    console.log("MNGO DB connection failed !!! ", err);
+  });
+
+app.on("error", (err) => {
+  console.error("Server error:", err);
+  process.exit(1); // Exit the process with a non-zero exit code
+});
 
 /**
  (async () => {
